@@ -348,12 +348,12 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 			shap.setPosY(y);
 			shap.drawBlock(g);
 		}
-		//그린 상대블록을 유지
+		//떨어지는 상대블록을 그리는 것을 유지한다.
 		try {
 			drawBlockShap(shap2, g);
 		}catch(NullPointerException e) {
 		e.printStackTrace();
-		}//HK
+		}//repaint_drawBlockShap
 	}
 
 	/* 상대 블록 그리기 HK */

@@ -33,15 +33,15 @@ public class DataShip implements Serializable{
 	private int totalAdd;
 	private int speed;
 	private TetrisBlock shap;//HK
-	private int player = -1;//임시
+	private int player = -1;// 플레이어를 구분하기 위한 변수 HK
 	
 
 	public DataShip(){}
 	public DataShip(int cmd){this.cmd = cmd;}
 
 	
-	public int getPlayer() {return player;}
-	public void setPlayer(int player) {this.player = player;}//임시
+	public int getPlayer() {return player;}//HK
+	public void setPlayer(int player) {this.player = player;}//HK
 	public TetrisBlock getShap( ) {return shap; }//HK
 	public void setShap(TetrisBlock shap) {this.shap = shap;}//HK
 	public void setCommand(int type){this.cmd = type;};

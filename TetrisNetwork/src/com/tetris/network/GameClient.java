@@ -109,8 +109,11 @@ public class GameClient implements Runnable{
 				rePrintSystemMessage(data.getMsg()+"\nTOTAL ADD : "+data.getTotalAdd());
 				tetris.getBoard().setPlay(false);
 			}else if(data.getCommand() == DataShip.DRAW_BLOCK_SHAP) {
-				reDrawBlockShap(data.getShap());
+				// 내가 보낸 요청이 아니었을 경우(상대방 플레이어의 블록이 이동한 경우) 화면에 그린다.
+				if(data.getPlayer() != this.index) {
+					reDrawBlockShap(data.getShap());
 				tetris.getBoard().setShap(data.getShap());
+				}
 			}//HK
 			
 		}//while(true)
@@ -139,7 +142,7 @@ public class GameClient implements Runnable{
 		data.setPlayer(index);
 		send(data);
 		try{
-			oos.reset();
+			oos.reset(); //블록의 좌표를 업데이트한다.
 		}catch(IOException e){
 			e.printStackTrace();
 		}

@@ -90,10 +90,8 @@ class GameHandler extends Thread{
 			}else if(data.getCommand()==DataShip.PRINT_SYSTEM_MESSAGE){
 				printSystemMessage(data.getMsg());
 			}else if(data.getCommand() == DataShip.DRAW_BLOCK_SHAP) {
-				if(data.getPlayer() != this.index) {
-					drawBlockShap(data.getShap());
-				}
-			}//HK
+					drawBlockShap(data.getShap(), data.getPlayer());
+			}//클라이언트로부터 블록의 정보와, 요청한 클라이언트의 index 값을 player변수로 받아온다. HK
 			
 		}//while(true)
 		
@@ -109,9 +107,16 @@ class GameHandler extends Thread{
 	}//run
 	
 	//응답하기 : 상대블록 그리기 HK
+	//요청받은 정보를 고대로 broadcasting한다.
 	public void drawBlockShap(TetrisBlock shap) {
 		DataShip data = new DataShip(DataShip.DRAW_BLOCK_SHAP);
 		data.setShap(shap);
+		broadcast(data);
+	}
+	public void drawBlockShap(TetrisBlock shap, int player) {
+		DataShip data = new DataShip(DataShip.DRAW_BLOCK_SHAP);
+		data.setShap(shap);
+		data.setPlayer(player);
 		broadcast(data);
 	}
 	
