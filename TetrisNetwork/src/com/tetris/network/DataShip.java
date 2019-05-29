@@ -23,6 +23,8 @@ public class DataShip implements Serializable{
 	public static final int GAME_WIN=11;
 	public static final int DRAW_BLOCK_SHAP=12;//HK
 	public static final int DRAW_BLOCK_DEPOSIT=13;//HK
+	public static final int DRAW_BLOCK_HOLD=14;//HK
+	public static final int DRAW_BLOCK_NEXT=15;//HK
 	
 	
 	private int cmd = -1;
@@ -36,7 +38,9 @@ public class DataShip implements Serializable{
 	private int totalAdd;
 	private int speed;
 	private TetrisBlock shap;//HK
+	private TetrisBlock hold2;//HK
 	private ArrayList<Block> blockList2;//HK
+	private ArrayList<TetrisBlock> nextBlocks2;//HK
 	private int player = -1;// 플레이어를 구분하기 위한 변수 HK
 	
 
@@ -44,6 +48,10 @@ public class DataShip implements Serializable{
 	public DataShip(int cmd){this.cmd = cmd;}
 
 	
+	public ArrayList<TetrisBlock> getNext()	{return nextBlocks2;}//HK
+	public void setNext(ArrayList<TetrisBlock> nextBlocks2) {this.nextBlocks2=nextBlocks2;}//HK
+	public TetrisBlock getHold() {return hold2;}//HK
+	public void setHold(TetrisBlock hold) {this.hold2=hold;}//HK
 	public ArrayList<Block> getDeposit() {return blockList2;}//HK
 	public void setDeposit(ArrayList<Block> blockList2) {this.blockList2=blockList2;}//HK
 	public int getPlayer() {return player;}//HK

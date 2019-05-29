@@ -84,7 +84,9 @@ public class GameClient implements Runnable{
 			try{
 				data = (DataShip)ois.readObject(); 
 			}catch(IOException e){e.printStackTrace();break;
-			}catch(ClassNotFoundException e){e.printStackTrace();}
+			}catch(ClassNotFoundException e){e.printStackTrace();
+			}
+			
 
 
 			//서버로부터 DataShip Object를 받아옴.
@@ -118,8 +120,18 @@ public class GameClient implements Runnable{
 				}
 			}else if(data.getCommand() == DataShip.DRAW_BLOCK_DEPOSIT) {		//HK
 				if(data.getPlayer() != this.index) {
-				reDrawBlockDeposit(data.getDeposit());
-				tetris.getBoard().setDeposit(data.getDeposit());
+					reDrawBlockDeposit(data.getDeposit());
+					tetris.getBoard().setDeposit(data.getDeposit());
+				}
+			}else if(data.getCommand() == DataShip.DRAW_BLOCK_HOLD) {		//HK
+				if(data.getPlayer() != this.index) {
+					reDrawBlockHold(data.getHold());
+					tetris.getBoard().setHold(data.getHold());
+				}
+			}else if(data.getCommand() == DataShip.DRAW_BLOCK_NEXT) {		//HK
+				if(data.getPlayer() != this.index) {
+					reDrawBlockNext(data.getNext());
+					tetris.getBoard().setNext(data.getNext());
 				}
 			}
 			
@@ -148,11 +160,12 @@ public class GameClient implements Runnable{
 		data.setShap(shap);
 		data.setPlayer(index);
 		send(data);
-		try{
-			oos.reset(); //블록의 좌표를 업데이트한다.
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+		System.out.println("client : "+shap.getPosX()+","+shap.getPosY());
+		
+		  try{ oos.reset(); //블록의 좌표를 업데이트한다
+		  }catch(IOException e){
+		  e.printStackTrace(); }
+		 
 	}
 	public void reDrawBlockShap(TetrisBlock shap) {
 		tetris.getBoard().drawBlockShap(shap);
@@ -163,16 +176,45 @@ public class GameClient implements Runnable{
 		data.setDeposit(blockList2);
 		data.setPlayer(index);
 		send(data);
-		try{
-			oos.reset(); //블록의 좌표를 업데이트한다.
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+		
+		  try{ oos.reset(); //블록의 좌표를 업데이트한다.
+		  }catch(IOException e){
+		  e.printStackTrace(); }
 	}
 	public void reDrawBlockDeposit(ArrayList<Block> blockList2) {
 		tetris.getBoard().drawBlockDeposit(blockList2);
 	}//drawBlockDeposit HK
 	
+	public void drawBlockHold(TetrisBlock hold) {
+		DataShip data = new DataShip(DataShip.DRAW_BLOCK_HOLD);
+		data.setHold(hold);
+		data.setPlayer(index);
+		send(data);
+		
+		  try{ oos.reset(); //블록의 좌표를 업데이트한다. 
+		  }catch(IOException e){
+		  e.printStackTrace(); }
+		 
+	}
+	public void reDrawBlockHold(TetrisBlock hold) {
+		tetris.getBoard().drawBlockHold(hold);
+	}//drawBlockHold HK
+	
+	public void drawBlockNext(ArrayList<TetrisBlock> nextBlocks) {
+		DataShip data = new DataShip(DataShip.DRAW_BLOCK_NEXT);
+		data.setNext(nextBlocks);
+		data.setPlayer(index);
+		send(data);
+		
+		  try{ oos.reset(); //블록의 좌표를 업데이트한다. 
+		  }catch(IOException e){
+		  e.printStackTrace(); }
+		 
+	}
+	public void reDrawBlockNext(ArrayList<TetrisBlock> nextBlocks) {
+		tetris.getBoard().drawBlockNext(nextBlocks);
+	}//drawBlockNext HK
+
 	
 	//요청하기 : 연결끊기
 	public void closeNetwork(boolean isServer){

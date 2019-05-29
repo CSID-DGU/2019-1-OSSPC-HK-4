@@ -23,6 +23,7 @@ import com.tetris.classes.Block;
 import com.tetris.classes.TetrisBlock;
 import com.tetris.controller.TetrisController;
 import com.tetris.network.GameClient;
+import com.tetris.network.GameServer;
 import com.tetris.shape.CenterUp;
 import com.tetris.shape.LeftTwoUp;
 import com.tetris.shape.LeftUp;
@@ -69,7 +70,9 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 	private TetrisController controllerGhost;
 	
 	private TetrisBlock shap2;//HK
+	private TetrisBlock hold2;//HK
 	private ArrayList<Block> blockList2;//HK
+	private ArrayList<TetrisBlock> nextBlocks2;//HK
 	
 	private boolean isPlay = false;
 	private boolean isHold = false;
@@ -154,6 +157,7 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 		blockList = new ArrayList<Block>();
 		nextBlocks = new ArrayList<TetrisBlock>();
 		blockList2 = new ArrayList<Block>();//HK
+		nextBlocks2 = new ArrayList<TetrisBlock>();//HK
 		
 		//도형셋팅
 		shap = getRandomTetrisBlock();
@@ -354,6 +358,8 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 		try {
 			drawBlockShap(shap2, g);
 			drawBlockDeposit(blockList2, g);
+			drawBlockHold(hold2, g);
+			drawBlockNext(nextBlocks2, g);
 		}catch(NullPointerException e) {
 		e.printStackTrace();
 		}//repaint_drawBlock
@@ -397,6 +403,44 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 		drawBlockDeposit(blockList, getGraphics());
 	}//drawBlockDeposit
 	
+	public void drawBlockHold(TetrisBlock hold, Graphics g) {
+		if(hold!=null){
+			
+			int x=0, y=0, newY=3;
+			x = hold.getPosX();
+			y = hold.getPosY();
+			hold.setPosX(20);
+			hold.setPosY(newY);
+			hold.drawBlock(g);
+			hold.setPosX(x);
+			hold.setPosY(y);
+		}
+	}
+	public void drawBlockHold(TetrisBlock hold) {
+		drawBlockHold(hold, getGraphics());
+	}//drawBlockHold
+	
+	public void drawBlockNext(ArrayList<TetrisBlock> nextBlocks, Graphics g) {
+		if(nextBlocks!=null){
+			
+			int x=0, y=0, newY=3;
+			for(int i = 0 ; i<nextBlocks.size() ; i++){
+				TetrisBlock block = nextBlocks.get(i);
+				x = block.getPosX();
+				y = block.getPosY();
+				block.setPosX(37);
+				block.setPosY(newY);
+				if(newY==3) newY=6;
+				block.drawBlock(g);
+				block.setPosX(x);
+				block.setPosY(y);
+				newY+=3;
+			}
+		}
+	}
+	public void drawBlockNext(ArrayList<TetrisBlock> nextBlocks) {
+		drawBlockNext(nextBlocks, getGraphics());
+	}//drawBlockNext
 	
 	@Override
 	public void run() {
@@ -405,6 +449,7 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 		int countUp = up;
 		
 		while(isPlay){
+			synchronized (TetrisBoard.class) {
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
@@ -437,7 +482,7 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 			}
 			//controller.showIndex();
 			this.repaint();
-			
+			}//synchronized() HK
 		}//while()
 	}//run()
 
@@ -806,6 +851,8 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 		}
 		this.getClient().drawBlockShap(controller.getBlock());//HK
 		this.getClient().drawBlockDeposit(blockList);//HK
+		this.getClient().drawBlockHold(hold);//HK
+		this.getClient().drawBlockNext(nextBlocks);//HK
 		this.showGhost();
 		this.repaint();
 	}
@@ -840,6 +887,8 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 			
 		}
 	}
+	public void setNext(ArrayList<TetrisBlock> nextBlocks2) {this.nextBlocks2 = nextBlocks2;}
+	public void setHold(TetrisBlock hold) {this.hold2 = hold;}
 	public void setDeposit(ArrayList<Block> blockList2) {this.blockList2 = blockList2;}
 	public void setShap(TetrisBlock shap) {this.shap2 = shap;}
 	public boolean isPlay(){return isPlay;}

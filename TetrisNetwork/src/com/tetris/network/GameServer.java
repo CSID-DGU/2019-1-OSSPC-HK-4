@@ -4,6 +4,7 @@ package com.tetris.network;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -61,9 +62,10 @@ class GameHandler extends Thread{
 		while(true){
 			try{
 				data = (DataShip)ois.readObject();
+				System.out.println("good!");//임시
 			}catch(IOException e){ e.printStackTrace(); break;
-			}catch(ClassNotFoundException e){e.printStackTrace();}
-
+			}catch(ClassNotFoundException e){e.printStackTrace();
+			}
 			if(data==null)continue;
 			
 			if(data.getCommand()==DataShip.CLOSE_NETWORK){
@@ -96,6 +98,10 @@ class GameHandler extends Thread{
 					drawBlockShap(data.getShap(), data.getPlayer());
 			}else if(data.getCommand() == DataShip.DRAW_BLOCK_DEPOSIT) {		//HK
 					drawBlockDeposit(data.getDeposit(), data.getPlayer());
+			}else if(data.getCommand() == DataShip.DRAW_BLOCK_HOLD) {		//HK
+					drawBlockHold(data.getHold(), data.getPlayer());
+			}else if(data.getCommand() == DataShip.DRAW_BLOCK_NEXT) {		//HK
+					drawBlockNext(data.getNext(), data.getPlayer());
 			}
 		}//while(true)
 		
@@ -118,10 +124,13 @@ class GameHandler extends Thread{
 		broadcast(data);
 	}
 	public void drawBlockShap(TetrisBlock shap, int player) {
+		synchronized(DataShip.class) {
 		DataShip data = new DataShip(DataShip.DRAW_BLOCK_SHAP);
 		data.setShap(shap);
 		data.setPlayer(player);
 		broadcast(data);
+		System.out.println("server : "+shap.getPosX()+","+shap.getPosY());//임시
+		}//synchronized(DataShip.class) HK
 	}//drawBlockShap
 	public void drawBlockDeposit(ArrayList<Block> blockList2) {
 		DataShip data = new DataShip(DataShip.DRAW_BLOCK_DEPOSIT);
@@ -129,12 +138,39 @@ class GameHandler extends Thread{
 		broadcast(data);
 	}
 	public void drawBlockDeposit(ArrayList<Block> blockList2, int player) {
+		synchronized(DataShip.class) {
 		DataShip data = new DataShip(DataShip.DRAW_BLOCK_DEPOSIT);
 		data.setDeposit(blockList2);
 		data.setPlayer(player);
 		broadcast(data);
+		}//synchronized(DataShip.class) HK
+	}//drawBlockDeposit
+	public void drawBlockHold(TetrisBlock hold) {
+		DataShip data = new DataShip(DataShip.DRAW_BLOCK_HOLD);
+		data.setHold(hold);
+		broadcast(data);
 	}
-	
+	public void drawBlockHold(TetrisBlock hold, int player) {
+		synchronized(DataShip.class) {
+		DataShip data = new DataShip(DataShip.DRAW_BLOCK_HOLD);
+		data.setHold(hold);
+		data.setPlayer(player);
+		broadcast(data);
+		}//synchronized(DataShip.class) HK
+	}//drawBlockHold
+	public void drawBlockNext(ArrayList<TetrisBlock> nextBlocks) {
+		DataShip data = new DataShip(DataShip.DRAW_BLOCK_NEXT);
+		data.setNext(nextBlocks);
+		broadcast(data);
+	}
+	public void drawBlockNext(ArrayList<TetrisBlock> nextBlocks, int player) {
+		synchronized(DataShip.class) {
+		DataShip data = new DataShip(DataShip.DRAW_BLOCK_NEXT);
+		data.setNext(nextBlocks);
+		data.setPlayer(player);
+		broadcast(data);
+		}//synchronized(DataShip.class) HK
+	}
 	
 	public void printMessage(String msg) {
 		DataShip data = new DataShip(DataShip.PRINT_MESSAGE);
@@ -325,4 +361,5 @@ public class GameServer implements Runnable{
 			e.printStackTrace();
 		}
 	}
+
 }//GameServer
