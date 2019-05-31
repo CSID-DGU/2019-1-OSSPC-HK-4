@@ -92,7 +92,7 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 	public Music GameMusic ;
 	public Music GameEndSound;
 	public Sound Sound;// 추가 
-	public ImageIcon icon;
+	public ImageIcon icon; // 추가
 	
 	public TetrisBoard(Tetris tetris, GameClient client) {
 		this.tetris = tetris;
@@ -220,7 +220,7 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 		
 		this.add(checkEffect);// 효과음 추가
 		this.add(checkBGM);// 배경화면 추가
-		icon = new ImageIcon(TetrisMain.class.getResource("../../../Images/desert-1654439_1920.jpg"));
+		icon = new ImageIcon(TetrisMain.class.getResource("../../../Images/desert-1654439_1920.jpg")); //배경으로 쓸 사진 파일 불러오기
 	}
 	
 	public void startNetworking(String ip, int port, String nickName){
@@ -284,7 +284,7 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 		g.setColor(new Color(189,142,98));
 		g.fillRect(0, BOARD_Y, 2*(2*BOARD_X+maxX*BLOCK_SIZE), maxY*BLOCK_SIZE);
 		*/
-		g.drawImage(icon.getImage(),0, 0, null);
+		g.drawImage(icon.getImage(),0, 0, null); // 배경화면 그리기
 		
 		// 보드 내 폰트 설정
 		Font font= g.getFont();
