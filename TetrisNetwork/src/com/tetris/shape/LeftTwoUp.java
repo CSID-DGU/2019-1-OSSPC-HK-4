@@ -5,7 +5,8 @@ import java.io.Serializable;
 
 import com.tetris.classes.TetrisBlock;
 
-public class LeftTwoUp extends TetrisBlock {
+public class LeftTwoUp extends TetrisBlock implements Serializable{
+	private static final long serialVersionUID = 1L; 
 
 	public LeftTwoUp(int x, int y) {
 		super(x, y, new Color(200,0,0),new Color(255,255,255));

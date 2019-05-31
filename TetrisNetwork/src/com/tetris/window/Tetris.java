@@ -15,6 +15,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import com.tetris.main.Music;
 import com.tetris.network.GameClient;
 import com.tetris.network.GameServer;
 
@@ -52,6 +53,10 @@ public class Tetris extends JFrame implements ActionListener{
 		
 		itemServerStart.addActionListener(this);
 		itemClientStart.addActionListener(this);
+		
+		Music music = new Music("Tetris.mp3", false); //hk 05-22 추가  // 0531 배경음 변경
+		music.run(); // hk 05-22 추
+		
 		this.addWindowListener(new WindowAdapter() {
 
 			@Override
