@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -93,6 +94,7 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 	public Music GameEndSound;
 	public Sound Sound;// 추가 
 	public ImageIcon icon; // 추가
+	public ImageIcon icon2; // 추가
 	
 	public TetrisBoard(Tetris tetris, GameClient client) {
 		this.tetris = tetris;
@@ -221,6 +223,10 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 		this.add(checkEffect);// 효과음 추가
 		this.add(checkBGM);// 배경화면 추가
 		icon = new ImageIcon(TetrisMain.class.getResource("../../../Images/desert-1654439_1920.jpg")); //배경으로 쓸 사진 파일 불러오기
+		/*
+		 * Image temp = icon.getImage(); Image temp2 = temp.getScaledInstance(1000, 600,
+		 * Image.SCALE_SMOOTH); icon2 = new ImageIcon(temp2);
+		 */
 	}
 	
 	public void startNetworking(String ip, int port, String nickName){
