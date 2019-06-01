@@ -550,7 +550,6 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
 			if(countDown!=0){
 				countDown--;
 				if(countDown==0){
@@ -779,10 +778,16 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 		}
 		GameEndSound = new Music("GameOver.mp3", false); 
 		GameEndSound.start();	
-		ImageIcon popupicon = new ImageIcon(TetrisMain.class.getResource("../../../Images/gameover.png"));
-		JOptionPane.showMessageDialog(null, null, "The End", JOptionPane.ERROR_MESSAGE, popupicon);
+		//ImageIcon popupicon = new ImageIcon(TetrisMain.class.getResource("../../../Images/gameover.png"));
 	}
-	
+	public void win() {
+		ImageIcon popupicon = new ImageIcon(TetrisMain.class.getResource("../../../Images/giphy(2).gif"));
+		JOptionPane.showMessageDialog(null, null, "Winer Winer Chicken Diner", JOptionPane.ERROR_MESSAGE, popupicon);
+	}
+	public void lose() {
+		ImageIcon popupicon = new ImageIcon(TetrisMain.class.getResource("../../../Images/giphy(1).gif"));
+		JOptionPane.showMessageDialog(null, null, "The End Loser", JOptionPane.ERROR_MESSAGE, popupicon);
+	}
 	
 	/**
 	 * 고스트블럭을 보여준다.

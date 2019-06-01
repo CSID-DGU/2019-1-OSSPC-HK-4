@@ -103,7 +103,13 @@ public class GameClient implements Runnable{
 			}else if(data.getCommand() == DataShip.SET_INDEX){
 				reSetIndex(data.getIndex());
 			}else if(data.getCommand() == DataShip.GAME_OVER){
-				if(index == data.getIndex()) isPlay = data.isPlay();
+				if(index == data.getIndex()) {
+					isPlay = data.isPlay();
+					tetris.getBoard().lose();
+				}
+				else {
+					tetris.getBoard().win();
+				}
 				reGameover(data.getMsg(), data.getTotalAdd());
 			}else if(data.getCommand() == DataShip.PRINT_MESSAGE){
 				rePrintMessage(data.getMsg());
