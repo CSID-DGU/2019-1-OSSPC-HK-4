@@ -268,7 +268,20 @@ public class GameClient implements Runnable{
 		send(data);
 	}
 	public void reAddBlock(String msg, int numOfBlock, int index){
-		if(index != this.index)tetris.getBoard().addBlockLine(numOfBlock);
+		if(index != this.index) {
+			tetris.getBoard().addBlockLine(numOfBlock);
+			
+			// 만약 속도가 15 이상이라면 최고 속도로 고정한다. HK
+			if(tetris.getBoard().getComboSpeed().getSelectedIndex() >= 14) {
+				tetris.getBoard().getComboSpeed().setSelectedIndex(19);
+			}
+			// 속도가 15보다 낮으면 속도를 5만큼 올린다. HK
+			else { 
+			Integer speed = tetris.getBoard().getComboSpeed().getSelectedIndex() + 5;
+			tetris.getBoard().getComboSpeed().setSelectedIndex(speed);
+			System.out.println(tetris.getBoard().getComboSpeed().getSelectedIndex()); // Test HK
+			}
+		}
 		rePrintSystemMessage(msg);
 	}
 	
