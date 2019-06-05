@@ -857,7 +857,7 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 	 */
 	public void getFixBlockCallBack(ArrayList<Block> blockList, int removeCombo, int removeMaxLine){
 		if(removeCombo<3){
-			if(removeMaxLine==3)client.addBlock(1);
+			if(removeMaxLine==1)client.addBlock(1);
 			else if(removeMaxLine==4)client.addBlock(3);
 		}else if(removeCombo<10){
 			if(removeMaxLine==3)client.addBlock(2);
@@ -896,44 +896,23 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 	 */
 	boolean stop = false;
 	public void addBlockLine(int numOfLine){
-		stop = true;
-		// 내리기가 있을 때까지 대기한다.
-		// 내리기를 모두 실행한 후 다시 시작한다.
-		Block block;
-		int rand = (int) (Math.random() * maxX);
-		for (int i = 0; i < numOfLine; i++) {
-			this.dropBoard(maxY - 1, -1);
-			for (int col = 0; col < maxX; col++) {
-				if (col != rand) {
-					block = new Block(0, 0, Color.GRAY, Color.GRAY);
-					block.setPosGridXY(col, maxY - 1);
-					blockList.add(block);
-					map[maxY - 1][col] = block;
-				}
-			}
-			//만약 내려오는 블럭과 겹치면 블럭을 위로 올린다.
-			boolean up = false;
-			for(int j=0 ; j<shap.getBlock().length ; j++){
-				Block sBlock = shap.getBlock(j);
-				if(map[sBlock.getY()][sBlock.getX()]!=null){
-					up = true;
-					break;
-				}
-			}
-			if(up){
-				controller.moveDown(-1);
-			}
-		}
-		
-		
-		
-		
-		this.showGhost();
-		this.repaint();
-		synchronized (this) {
-			stop = false;
-			this.notify();
-		}
+		/*
+		 * stop = true; // 내리기가 있을 때까지 대기한다. // 내리기를 모두 실행한 후 다시 시작한다. Block block; int
+		 * rand = (int) (Math.random() * maxX); for (int i = 0; i < numOfLine; i++) {
+		 * this.dropBoard(maxY - 1, -1); for (int col = 0; col < maxX; col++) { if (col
+		 * != rand) { block = new Block(0, 0, Color.GRAY, Color.GRAY);
+		 * block.setPosGridXY(col, maxY - 1); blockList.add(block); map[maxY - 1][col] =
+		 * block; } } //만약 내려오는 블럭과 겹치면 블럭을 위로 올린다. boolean up = false; for(int j=0 ;
+		 * j<shap.getBlock().length ; j++){ Block sBlock = shap.getBlock(j);
+		 * if(map[sBlock.getY()][sBlock.getX()]!=null){ up = true; break; } } if(up){
+		 * controller.moveDown(-1); } }
+		 * 
+		 * 
+		 * 
+		 * 
+		 * this.showGhost(); this.repaint(); synchronized (this) { stop = false;
+		 * this.notify(); }
+		 */
 	}
 	
 	public void GameEndPopUp() {
