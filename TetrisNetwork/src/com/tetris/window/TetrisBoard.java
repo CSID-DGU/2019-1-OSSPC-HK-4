@@ -754,12 +754,13 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 		controllerGhost.setBlock(ghost);
 	}
 	
-	
 	/**
 	 * lineNumber 라인을 삭제하고, drawlist에서 제거하고, map을 아래로 내린다.
 	 * @param lineNumber 삭제라인
 	 */
 	private void removeBlockLine(int lineNumber) {
+		if(usingEffect) new Music("Remove_Line.mp3",false).start(); // 라인 제거시 효과음 ! 06/10일
+		
 		// 1줄을 지워줌
 		for (int j = 0; j < maxX ; j++) {
 			for (int s = 0; s < blockList.size(); s++) {
@@ -792,8 +793,26 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 		JOptionPane.showMessageDialog(null, null, "Winer Winer Chicken Diner", JOptionPane.ERROR_MESSAGE, popupicon);
 	}
 	public void lose() {
-		ImageIcon popupicon = new ImageIcon(TetrisMain.class.getResource("../../../Images/giphy(1).gif"));
+		ImageIcon popupicon = new ImageIcon(TetrisMain.class.getResource("../../../Images/giphy-2.gif"));
 		JOptionPane.showMessageDialog(null, null, "The End Loser", JOptionPane.ERROR_MESSAGE, popupicon);
+	}
+	  /**
+	   * 라인을 지울때마다 gif 시각이미지가 출력되며, 1초뒤에 자동으로 사라짐.	
+	   */
+	public void removeLineImage() {
+		new Thread() {   
+            public void run() {   
+                for (int k = 0; k < 1; k++) {   
+                    try {   
+                        Thread.sleep(2000);                               
+                    } catch (InterruptedException e) {   
+                    }   
+                    JOptionPane.getRootFrame().dispose();   
+                }   
+            }   
+        }.start();  
+		ImageIcon popupicon = new ImageIcon(TetrisMain.class.getResource("../../../Images/BoomBitch!.gif"));
+		JOptionPane.showMessageDialog(null, null, "IClearedALineBitch", JOptionPane.ERROR_MESSAGE, popupicon);
 	}
 	
 	/**
@@ -896,23 +915,23 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 	 */
 	boolean stop = false;
 	public void addBlockLine(int numOfLine){
-		/*
-		 * stop = true; // 내리기가 있을 때까지 대기한다. // 내리기를 모두 실행한 후 다시 시작한다. Block block; int
-		 * rand = (int) (Math.random() * maxX); for (int i = 0; i < numOfLine; i++) {
-		 * this.dropBoard(maxY - 1, -1); for (int col = 0; col < maxX; col++) { if (col
-		 * != rand) { block = new Block(0, 0, Color.GRAY, Color.GRAY);
-		 * block.setPosGridXY(col, maxY - 1); blockList.add(block); map[maxY - 1][col] =
-		 * block; } } //만약 내려오는 블럭과 겹치면 블럭을 위로 올린다. boolean up = false; for(int j=0 ;
-		 * j<shap.getBlock().length ; j++){ Block sBlock = shap.getBlock(j);
-		 * if(map[sBlock.getY()][sBlock.getX()]!=null){ up = true; break; } } if(up){
-		 * controller.moveDown(-1); } }
-		 * 
-		 * 
-		 * 
-		 * 
-		 * this.showGhost(); this.repaint(); synchronized (this) { stop = false;
-		 * this.notify(); }
-		 */
+//		
+//		 stop = true; // 내리기가 있을 때까지 대기한다. // 내리기를 모두 실행한 후 다시 시작한다. Block block; int
+//		 rand = (int) (Math.random() * maxX); for (int i = 0; i < numOfLine; i++) {
+//		 this.dropBoard(maxY - 1, -1); for (int col = 0; col < maxX; col++) { if (col
+//		 != rand) { block = new Block(0, 0, Color.GRAY, Color.GRAY);
+//		 block.setPosGridXY(col, maxY - 1); blockList.add(block); map[maxY - 1][col] =
+//		 block; } } //만약 내려오는 블럭과 겹치면 블럭을 위로 올린다. boolean up = false; for(int j=0 ;
+//		 j<shap.getBlock().length ; j++){ Block sBlock = shap.getBlock(j);
+//		 if(map[sBlock.getY()][sBlock.getX()]!=null){ up = true; break; } } if(up){
+//		 controller.moveDown(-1); } }
+//		 
+//		 
+//		 
+//		 
+//		 this.showGhost(); this.repaint(); synchronized (this) { stop = false;
+//		 this.notify(); }
+//		 
 	}
 	
 	public void GameEndPopUp() {

@@ -100,6 +100,9 @@ public class GameClient implements Runnable{
 				reGameStart(data.isPlay(), data.getMsg(), data.getSpeed());
 			}else if(data.getCommand() == DataShip.ADD_BLOCK){
 				if(isPlay)reAddBlock(data.getMsg(), data.getNumOfBlock(), data.getIndex());
+				if(index != data.getIndex()) {
+					tetris.getBoard().removeLineImage(); // 공격 시 이미지 HK
+				}
 			}else if(data.getCommand() == DataShip.SET_INDEX){
 				reSetIndex(data.getIndex());
 			}else if(data.getCommand() == DataShip.GAME_OVER){
@@ -270,7 +273,6 @@ public class GameClient implements Runnable{
 	public void reAddBlock(String msg, int numOfBlock, int index){
 		if(index != this.index) {
 			tetris.getBoard().addBlockLine(numOfBlock);
-			
 			// 만약 속도가 15 이상이라면 최고 속도로 고정한다. HK
 			if(tetris.getBoard().getComboSpeed().getSelectedIndex() >= 14) {
 				tetris.getBoard().getComboSpeed().setSelectedIndex(19);
