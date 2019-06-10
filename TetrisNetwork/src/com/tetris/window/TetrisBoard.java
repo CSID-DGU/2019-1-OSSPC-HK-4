@@ -759,6 +759,26 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 	 * @param lineNumber 삭제라인
 	 */
 	private void removeBlockLine(int lineNumber) {
+		if(usingEffect) new Music("Remove_Line.mp3",false).start(); // 라인 제거시 효과음 ! 06/10일 
+		
+		new Thread() {   
+	            public void run() {   
+	                for (int k = 0; k < 1; k++) {   
+	                    try {   
+	                        Thread.sleep(2000);                               
+	                    } catch (InterruptedException e) {   
+	                    }   
+	                    JOptionPane.getRootFrame().dispose();   
+	                }   
+	            }   
+	        }.start();  
+
+
+			ImageIcon popupicon = new ImageIcon(TetrisMain.class.getResource("../../../Images/BoomBitch!.gif"));
+			JOptionPane.showMessageDialog(null, null, "IClearedALineBitch", JOptionPane.ERROR_MESSAGE, popupicon);
+		  /**
+		   * 라인을 지울때마다 gif 시각이미지가 출력되며, 1초뒤에 자동으로 사라짐.	
+		   */
 		// 1줄을 지워줌
 		for (int j = 0; j < maxX ; j++) {
 			for (int s = 0; s < blockList.size(); s++) {
