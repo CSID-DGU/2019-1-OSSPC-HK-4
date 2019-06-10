@@ -1,10 +1,8 @@
 package com.tetris.window;
 
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.Color;import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -223,6 +221,8 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 		this.add(checkEffect);// 효과음 추가
 		this.add(checkBGM);// 배경화면 추가
 		icon = new ImageIcon(TetrisMain.class.getResource("../../../Images/desert-1654439_1920.jpg")); //배경으로 쓸 사진 파일 불러오기
+		
+		// 배경화면 사이즈 조절
 		/*
 		 * Image temp = icon.getImage(); Image temp2 = temp.getScaledInstance(1000, 600,
 		 * Image.SCALE_SMOOTH); icon2 = new ImageIcon(temp2);
@@ -291,6 +291,7 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 		g.fillRect(0, BOARD_Y, 2*(2*BOARD_X+maxX*BLOCK_SIZE), maxY*BLOCK_SIZE);
 		*/
 		g.drawImage(icon.getImage(),0, 0, null); // 배경화면 그리기
+		// g.drawImage(icon2.getImage(),0, 0, null); // 사이즈 조절된 배경화면 그리기
 		
 		// 보드 내 폰트 설정
 		Font font= g.getFont();
@@ -753,12 +754,13 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 		controllerGhost.setBlock(ghost);
 	}
 	
-	
 	/**
 	 * lineNumber 라인을 삭제하고, drawlist에서 제거하고, map을 아래로 내린다.
 	 * @param lineNumber 삭제라인
 	 */
 	private void removeBlockLine(int lineNumber) {
+		if(usingEffect) new Music("Remove_Line.mp3",false).start(); // 라인 제거시 효과음 ! 06/10일
+		
 		// 1줄을 지워줌
 		for (int j = 0; j < maxX ; j++) {
 			for (int s = 0; s < blockList.size(); s++) {
@@ -791,8 +793,26 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 		JOptionPane.showMessageDialog(null, null, "Winer Winer Chicken Diner", JOptionPane.ERROR_MESSAGE, popupicon);
 	}
 	public void lose() {
-		ImageIcon popupicon = new ImageIcon(TetrisMain.class.getResource("../../../Images/giphy(1).gif"));
+		ImageIcon popupicon = new ImageIcon(TetrisMain.class.getResource("../../../Images/giphy-2.gif"));
 		JOptionPane.showMessageDialog(null, null, "The End Loser", JOptionPane.ERROR_MESSAGE, popupicon);
+	}
+	  /**
+	   * 라인을 지울때마다 gif 시각이미지가 출력되며, 1초뒤에 자동으로 사라짐.	
+	   */
+	public void removeLineImage() {
+		new Thread() {   
+            public void run() {   
+                for (int k = 0; k < 1; k++) {   
+                    try {   
+                        Thread.sleep(2000);                               
+                    } catch (InterruptedException e) {   
+                    }   
+                    JOptionPane.getRootFrame().dispose();   
+                }   
+            }   
+        }.start();  
+		ImageIcon popupicon = new ImageIcon(TetrisMain.class.getResource("../../../Images/BoomBitch!.gif"));
+		JOptionPane.showMessageDialog(null, null, "IClearedALineBitch", JOptionPane.ERROR_MESSAGE, popupicon);
 	}
 	
 	/**
@@ -856,7 +876,7 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 	 */
 	public void getFixBlockCallBack(ArrayList<Block> blockList, int removeCombo, int removeMaxLine){
 		if(removeCombo<3){
-			if(removeMaxLine==3)client.addBlock(1);
+			if(removeMaxLine==1)client.addBlock(1);
 			else if(removeMaxLine==4)client.addBlock(3);
 		}else if(removeCombo<10){
 			if(removeMaxLine==3)client.addBlock(2);
@@ -895,44 +915,23 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 	 */
 	boolean stop = false;
 	public void addBlockLine(int numOfLine){
-		stop = true;
-		// 내리기가 있을 때까지 대기한다.
-		// 내리기를 모두 실행한 후 다시 시작한다.
-		Block block;
-		int rand = (int) (Math.random() * maxX);
-		for (int i = 0; i < numOfLine; i++) {
-			this.dropBoard(maxY - 1, -1);
-			for (int col = 0; col < maxX; col++) {
-				if (col != rand) {
-					block = new Block(0, 0, Color.GRAY, Color.GRAY);
-					block.setPosGridXY(col, maxY - 1);
-					blockList.add(block);
-					map[maxY - 1][col] = block;
-				}
-			}
-			//만약 내려오는 블럭과 겹치면 블럭을 위로 올린다.
-			boolean up = false;
-			for(int j=0 ; j<shap.getBlock().length ; j++){
-				Block sBlock = shap.getBlock(j);
-				if(map[sBlock.getY()][sBlock.getX()]!=null){
-					up = true;
-					break;
-				}
-			}
-			if(up){
-				controller.moveDown(-1);
-			}
-		}
-		
-		
-		
-		
-		this.showGhost();
-		this.repaint();
-		synchronized (this) {
-			stop = false;
-			this.notify();
-		}
+//		
+//		 stop = true; // 내리기가 있을 때까지 대기한다. // 내리기를 모두 실행한 후 다시 시작한다. Block block; int
+//		 rand = (int) (Math.random() * maxX); for (int i = 0; i < numOfLine; i++) {
+//		 this.dropBoard(maxY - 1, -1); for (int col = 0; col < maxX; col++) { if (col
+//		 != rand) { block = new Block(0, 0, Color.GRAY, Color.GRAY);
+//		 block.setPosGridXY(col, maxY - 1); blockList.add(block); map[maxY - 1][col] =
+//		 block; } } //만약 내려오는 블럭과 겹치면 블럭을 위로 올린다. boolean up = false; for(int j=0 ;
+//		 j<shap.getBlock().length ; j++){ Block sBlock = shap.getBlock(j);
+//		 if(map[sBlock.getY()][sBlock.getX()]!=null){ up = true; break; } } if(up){
+//		 controller.moveDown(-1); } }
+//		 
+//		 
+//		 
+//		 
+//		 this.showGhost(); this.repaint(); synchronized (this) { stop = false;
+//		 this.notify(); }
+//		 
 	}
 	
 	public void GameEndPopUp() {
@@ -1045,10 +1044,14 @@ public class TetrisBoard extends JPanel implements Runnable, KeyListener, MouseL
 			
 		}
 	}
-	public void setNext(ArrayList<TetrisBlock> nextBlocks2) {this.nextBlocks2 = nextBlocks2;}
-	public void setHold(TetrisBlock hold) {this.hold2 = hold;}
-	public void setDeposit(ArrayList<Block> blockList2) {this.blockList2 = blockList2;}
-	public void setShap(TetrisBlock shap) {this.shap2 = shap;}
+	
+	
+	public JComboBox<Integer> getComboSpeed() {return comboSpeed;}// HK
+	public void setComboSpeed(JComboBox<Integer> comboSpeed) {this.comboSpeed = comboSpeed;}// HK
+	public void setNext(ArrayList<TetrisBlock> nextBlocks2) {this.nextBlocks2 = nextBlocks2;}// HK
+	public void setHold(TetrisBlock hold) {this.hold2 = hold;}// HK
+	public void setDeposit(ArrayList<Block> blockList2) {this.blockList2 = blockList2;}// HK
+	public void setShap(TetrisBlock shap) {this.shap2 = shap;}// HK
 	public boolean isPlay(){return isPlay;}
 	public void setPlay(boolean isPlay){this.isPlay = isPlay;}
 	public JButton getBtnStart() {return btnStart;}
