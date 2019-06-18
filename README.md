@@ -24,6 +24,7 @@ https://github.com/CSID-DGU/2017-2-OSSP-jalhaebojo-2
 MP3 Source & GIF Source
 
 https://www.youtube.com/audiolibrary/music
+
 https://www.giphy.com
 
 Development Environment and IDE
