@@ -49,6 +49,7 @@ Our main goal was to make an original Tetris into a real-life game. A Tetris gam
   This new function is the one we desperately wanted and worked on it. And we nailed it. When launched, the game used to have a single window even though we were able to play with your friend. 
 <img width="368" alt="image" src="https://user-images.githubusercontent.com/48506842/59691012-56d4bc00-921d-11e9-85e3-c62b886c78ed.png">
 <img width="359" alt="image" src="https://user-images.githubusercontent.com/48506842/59691028-5cca9d00-921d-11e9-84ec-f5ad5b03d9dd.png">
+ 
  It was a huge leap then. But we wanted to take it even further than that. We are proudly presenting OUR TOTALLY NEW       BREATHTAKING MULTI-WINDOW.
 
 
